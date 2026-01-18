@@ -115,84 +115,104 @@ class NutriScanApp {
     }
 
 async saveSettings() {
-        console.log('💾 Saving settings...');
+    console.log('💾 Saving settings...');
+    
+    // Save Gemini API key
+    const geminiKeyInput = document.getElementById('gemini-api-key');
+    const geminiKey = geminiKeyInput.value.trim();
+    
+    if (geminiKey) {
+        console.log('🔑 API Key entered, length:', geminiKey.length);
         
-        // Save Gemini API key
-        const geminiKeyInput = document.getElementById('gemini-api-key');
-        const geminiKey = geminiKeyInput.value.trim();
-        
-        if (geminiKey) {
-            console.log('🔑 API Key entered, saving...');
-            this.geminiAPI.setApiKey(geminiKey);
-            
-            // CRITICAL FIX: Reload the API key into the instance
-            this.geminiAPI.loadApiKey();
-            
-            console.log('✅ API key saved and loaded');
-            console.log('Verification:', this.geminiAPI.apiKey ? `Has ${this.geminiAPI.apiKey.length} chars` : 'STILL EMPTY!');
-            
-            // Clear input
-            geminiKeyInput.value = '';
-        }
-
-        // Save dietary profile
-        const profile = document.getElementById('dietary-profile').value;
-        this.dietaryAnalyzer.setDietaryProfile(profile);
-
-        // Save allergens
-        const selectedAllergens = [];
-        CONFIG.ALLERGENS.forEach(allergen => {
-            const checkbox = document.getElementById(`allergen-${allergen}`);
-            if (checkbox && checkbox.checked) {
-                selectedAllergens.push(allergen);
-            }
-        });
-        
-        this.allergyDetector.userAllergens = selectedAllergens;
-        this.allergyDetector.saveUserAllergens();
-
-        // Save goals
-        const caloriesGoal = parseInt(document.getElementById('goal-calories').value);
-        const sugarGoal = parseInt(document.getElementById('goal-sugar').value);
-        const sodiumGoal = parseInt(document.getElementById('goal-sodium').value);
-        
-        this.goalTracker.setGoal('calories', caloriesGoal, caloriesGoal * 1.25);
-        this.goalTracker.setGoal('sugar', sugarGoal, sugarGoal * 1.5);
-        this.goalTracker.setGoal('sodium', sodiumGoal, sodiumGoal * 1.15);
-
-        this.notifications.show('Settings saved successfully!', 'success');
-        this.toggleSettings();
-        
-        console.log('✅ All settings saved');
-    }
-
-    async testAPIConnection() {
-        const button = document.getElementById('test-api');
-        const originalText = button.textContent;
-        button.textContent = 'Testing...';
-        button.disabled = true;
-
+        // Save to localStorage FIRST
         try {
-            // CRITICAL FIX: Always reload API key before testing
-            console.log('🔄 Reloading API key from storage...');
-            this.geminiAPI.loadApiKey();
+            localStorage.setItem(CONFIG.STORAGE_KEYS.GEMINI_API_KEY, geminiKey);
+            sessionStorage.setItem(CONFIG.STORAGE_KEYS.GEMINI_API_KEY, geminiKey);
+            console.log('✅ Saved to localStorage');
             
-            console.log('Current API key:', this.geminiAPI.apiKey ? `${this.geminiAPI.apiKey.length} chars` : 'EMPTY');
+            // Verify it was saved
+            const verify = localStorage.getItem(CONFIG.STORAGE_KEYS.GEMINI_API_KEY);
+            console.log('Verification - localStorage has:', verify ? `${verify.length} chars` : 'NOTHING');
             
-            if (!this.geminiAPI.apiKey) {
-                throw new Error('Gemini API key not configured. Please enter your API key in Settings.');
-            }
-            
-            await this.geminiAPI.testConnection();
-            this.notifications.show('✅ Gemini API connection successful!', 'success');
         } catch (error) {
-            console.error('❌ API test failed:', error);
-            this.notifications.show(`❌ API test failed: ${error.message}`, 'error', 5000);
-        } finally {
-            button.textContent = originalText;
-            button.disabled = false;
+            console.error('❌ Failed to save to localStorage:', error);
         }
+        
+        // Then update the GeminiAPI instance
+        this.geminiAPI.apiKey = geminiKey;
+        console.log('✅ Updated GeminiAPI instance, now has:', this.geminiAPI.apiKey ? `${this.geminiAPI.apiKey.length} chars` : 'STILL EMPTY');
+        
+        // Clear input LAST
+        geminiKeyInput.value = '';
+    } else {
+        console.log('⚠️ No API key entered');
     }
+
+    // Save dietary profile
+    const profile = document.getElementById('dietary-profile').value;
+    this.dietaryAnalyzer.setDietaryProfile(profile);
+
+    // Save allergens
+    const selectedAllergens = [];
+    CONFIG.ALLERGENS.forEach(allergen => {
+        const checkbox = document.getElementById(`allergen-${allergen}`);
+        if (checkbox && checkbox.checked) {
+            selectedAllergens.push(allergen);
+        }
+    });
+    
+    this.allergyDetector.userAllergens = selectedAllergens;
+    this.allergyDetector.saveUserAllergens();
+
+    // Save goals
+    const caloriesGoal = parseInt(document.getElementById('goal-calories').value);
+    const sugarGoal = parseInt(document.getElementById('goal-sugar').value);
+    const sodiumGoal = parseInt(document.getElementById('goal-sodium').value);
+    
+    this.goalTracker.setGoal('calories', caloriesGoal, caloriesGoal * 1.25);
+    this.goalTracker.setGoal('sugar', sugarGoal, sugarGoal * 1.5);
+    this.goalTracker.setGoal('sodium', sodiumGoal, sodiumGoal * 1.15);
+
+    this.notifications.show('Settings saved successfully!', 'success');
+    this.toggleSettings();
+    
+    console.log('✅ All settings saved');
+}
+
+async testAPIConnection() {
+    const button = document.getElementById('test-api');
+    const originalText = button.textContent;
+    button.textContent = 'Testing...';
+    button.disabled = true;
+
+    try {
+        console.log('🔄 Reloading API key from storage...');
+        
+        // Check localStorage directly
+        const storedKey = localStorage.getItem(CONFIG.STORAGE_KEYS.GEMINI_API_KEY);
+        console.log('localStorage check:', storedKey ? `Has ${storedKey.length} chars` : 'EMPTY');
+        
+        // Update instance if needed
+        if (storedKey) {
+            this.geminiAPI.apiKey = storedKey;
+        }
+        
+        console.log('Current API key:', this.geminiAPI.apiKey ? `${this.geminiAPI.apiKey.length} chars` : 'EMPTY');
+        
+        if (!this.geminiAPI.apiKey) {
+            throw new Error('Gemini API key not configured. Please enter your API key in Settings.');
+        }
+        
+        await this.geminiAPI.testConnection();
+        this.notifications.show('✅ Gemini API connection successful!', 'success');
+    } catch (error) {
+        console.error('❌ API test failed:', error);
+        this.notifications.show(`❌ API test failed: ${error.message}`, 'error', 5000);
+    } finally {
+        button.textContent = originalText;
+        button.disabled = false;
+    }
+}
 
 async startScanner() {
         const startBtn = document.getElementById('start-scan-btn');

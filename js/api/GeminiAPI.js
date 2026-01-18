@@ -1,16 +1,14 @@
 class GeminiAPI {
     constructor() {
         this.apiKey = '';
-        this.baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+        // Changed to gemini-2.0-flash-exp (1,500/day vs 20 total for 2.5)
+        this.baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent';
         this.loadApiKey();
     }
 
     loadApiKey() {
         try {
-            // Try multiple storage methods for better compatibility
-            this.apiKey = localStorage.getItem(CONFIG.STORAGE_KEYS.GEMINI_API_KEY) || 
-                         sessionStorage.getItem(CONFIG.STORAGE_KEYS.GEMINI_API_KEY) || 
-                         '';
+            this.apiKey = localStorage.getItem(CONFIG.STORAGE_KEYS.GEMINI_API_KEY) || '';
             
             if (this.apiKey) {
                 console.log('✅ API key loaded from storage');
@@ -20,24 +18,6 @@ class GeminiAPI {
         } catch (error) {
             console.error('Failed to load API key:', error);
             this.apiKey = '';
-        }
-    }
-
-    setApiKey(key) {
-        try {
-            // CRITICAL: Set instance variable FIRST
-            this.apiKey = key;
-            
-            // Then save to storage
-            localStorage.setItem(CONFIG.STORAGE_KEYS.GEMINI_API_KEY, key);
-            sessionStorage.setItem(CONFIG.STORAGE_KEYS.GEMINI_API_KEY, key);
-            
-            console.log('✅ API key saved to storage');
-            console.log('Instance variable set:', this.apiKey ? `${this.apiKey.length} chars` : 'EMPTY');
-        } catch (error) {
-            console.error('Failed to save API key:', error);
-            // Still keep it in memory even if storage fails
-            this.apiKey = key;
         }
     }
 
@@ -52,7 +32,7 @@ class GeminiAPI {
 
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
 
             const response = await fetch(`${this.baseUrl}?key=${this.apiKey}`, {
                 method: 'POST',
@@ -87,9 +67,12 @@ class GeminiAPI {
                     if (response.status === 400) {
                         errorMessage = 'Invalid API key format. Please check your Gemini API key.';
                     } else if (response.status === 403) {
-                        errorMessage = 'API key authentication failed. Make sure:\n1. Your API key is correct\n2. Gemini API is enabled in Google Cloud Console\n3. There are no billing issues';
+                        errorMessage = 'API key authentication failed. Make sure your API key is correct and Gemini API is enabled.';
                     } else if (response.status === 429) {
-                        errorMessage = 'API rate limit exceeded. Please wait a moment and try again.';
+                        // Extract retry time if available
+                        const retryMatch = errorData.error?.message?.match(/retry in (\d+\.?\d*)/i);
+                        const retrySeconds = retryMatch ? Math.ceil(parseFloat(retryMatch[1])) : 60;
+                        errorMessage = `Rate limit exceeded. Please wait ${retrySeconds} seconds and try again.`;
                     } else {
                         errorMessage = errorData.error?.message || errorMessage;
                     }
@@ -103,7 +86,7 @@ class GeminiAPI {
             const data = await response.json();
             console.log('✅ Connection test successful:', data);
             
-            // Check if we got a valid response (candidates array exists)
+            // Check if we got a valid response
             if (data.candidates && data.candidates.length > 0) {
                 console.log('✅ Valid response received from Gemini API');
                 return 'Connection successful! Gemini API is working.';
@@ -119,7 +102,7 @@ class GeminiAPI {
             }
             
             if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                throw new Error('Network error. Please check:\n1. Your internet connection\n2. If you\'re behind a firewall/VPN\n3. If CORS is blocking the request (try in incognito mode)');
+                throw new Error('Network error. Please check your internet connection.');
             }
             
             throw error;
@@ -172,7 +155,7 @@ Use bullet points and be concise. IMPORTANT: Complete both sections fully.`;
             console.log('🤖 Calling Gemini API for product analysis...');
             
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
 
             const response = await fetch(`${this.baseUrl}?key=${this.apiKey}`, {
                 method: 'POST',
@@ -228,7 +211,9 @@ Use bullet points and be concise. IMPORTANT: Complete both sections fully.`;
                     } else if (response.status === 403) {
                         errorMessage = 'API access denied. Verify your API key is correct and active.';
                     } else if (response.status === 429) {
-                        errorMessage = 'Rate limit exceeded. Please wait a moment and try again.';
+                        const retryMatch = errorData.error?.message?.match(/retry in (\d+\.?\d*)/i);
+                        const retrySeconds = retryMatch ? Math.ceil(parseFloat(retryMatch[1])) : 60;
+                        errorMessage = `Rate limit exceeded. Please wait ${retrySeconds} seconds and try again.`;
                     } else {
                         errorMessage = errorData.error?.message || errorMessage;
                     }
@@ -242,7 +227,6 @@ Use bullet points and be concise. IMPORTANT: Complete both sections fully.`;
             const data = await response.json();
             console.log('Full Gemini response:', data);
             
-            // Check for finish reason
             const candidate = data.candidates?.[0];
             if (!candidate) {
                 throw new Error('No response received from Gemini API');
@@ -287,17 +271,17 @@ Use bullet points and be concise. IMPORTANT: Complete both sections fully.`;
         let analysis = '';
         let recommendations = '';
 
-        // Strategy 1: Look for numbered sections (1. ANALYSIS, 2. RECOMMENDATIONS)
+        // Strategy 1: Look for numbered sections
         const section1Match = text.match(/##?\s*1\.\s*ANALYSIS:?\s*([\s\S]*?)(?=##?\s*2\.\s*RECOMMENDATIONS?:|$)/i);
         const section2Match = text.match(/##?\s*2\.\s*RECOMMENDATIONS?:?\s*([\s\S]*?)$/i);
 
         if (section1Match && section1Match[1]) {
             analysis = section1Match[1].trim();
-            console.log('✅ Found analysis section (strategy 1)');
+            console.log('✅ Found analysis section');
         }
         if (section2Match && section2Match[1]) {
             recommendations = section2Match[1].trim();
-            console.log('✅ Found recommendations section (strategy 1)');
+            console.log('✅ Found recommendations section');
         }
 
         // Strategy 2: Look for markdown headers
@@ -306,10 +290,8 @@ Use bullet points and be concise. IMPORTANT: Complete both sections fully.`;
             parts.forEach(part => {
                 if (part.toLowerCase().includes('analysis')) {
                     analysis = part.replace(/1?\.\s*analysis:?/i, '').trim();
-                    console.log('✅ Found analysis section (strategy 2)');
                 } else if (part.toLowerCase().includes('recommendation')) {
                     recommendations = part.replace(/2?\.\s*recommendations?:?/i, '').trim();
-                    console.log('✅ Found recommendations section (strategy 2)');
                 }
             });
         }
@@ -320,22 +302,18 @@ Use bullet points and be concise. IMPORTANT: Complete both sections fully.`;
             if (splitPoint > 50) {
                 analysis = text.substring(0, splitPoint).replace(/##?\s*1?\.\s*ANALYSIS:?/i, '').trim();
                 recommendations = text.substring(splitPoint).replace(/##?\s*2?\.\s*RECOMMENDATIONS?:/i, '').trim();
-                console.log('✅ Split on RECOMMENDATIONS keyword (strategy 3)');
             }
         }
 
-        // Fallback: Use whole text as analysis
+        // Fallback
         if (!analysis) {
             analysis = text.trim();
             recommendations = 'Please review the analysis above for detailed recommendations.';
-            console.log('⚠️ Using fallback parsing');
         }
 
         // Format as HTML
         analysis = this.formatTextToHTML(analysis);
         recommendations = this.formatTextToHTML(recommendations);
-
-        console.log('✅ Parsing complete');
         
         return {
             analysis: analysis || '<p>Analysis not available.</p>',
@@ -348,7 +326,7 @@ Use bullet points and be concise. IMPORTANT: Complete both sections fully.`;
 
         text = text.trim();
 
-        // Remove incomplete sentences at the end
+        // Remove incomplete sentences
         if (!text.match(/[.!?]$/)) {
             const lastPeriod = Math.max(
                 text.lastIndexOf('.'),
