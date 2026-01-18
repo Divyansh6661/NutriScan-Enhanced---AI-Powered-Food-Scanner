@@ -1,0 +1,56 @@
+{
+  "ingredients": {
+    "good": [
+      { "name": "water", "description": "Essential hydration base", "benefits": ["Hydration", "Zero calories"] },
+      { "name": "olive oil", "description": "Heart-healthy fat", "benefits": ["Monounsaturated fats", "Antioxidants"] },
+      { "name": "whole grain", "description": "High in fiber", "benefits": ["Fiber", "B vitamins", "Minerals"] },
+      { "name": "oats", "description": "Soluble fiber source", "benefits": ["Heart health", "Sustained energy"] },
+      { "name": "quinoa", "description": "Complete protein", "benefits": ["All 9 amino acids", "Gluten-free"] },
+      { "name": "fruits", "description": "Natural vitamins", "benefits": ["Vitamins", "Antioxidants", "Fiber"] },
+      { "name": "vegetables", "description": "Nutrient-dense", "benefits": ["Vitamins", "Minerals", "Low calorie"] },
+      { "name": "nuts", "description": "Healthy fats and protein", "benefits": ["Omega-3", "Protein", "Vitamin E"] },
+      { "name": "seeds", "description": "Nutrient powerhouse", "benefits": ["Healthy fats", "Minerals", "Protein"] },
+      { "name": "honey", "description": "Natural sweetener", "benefits": ["Antioxidants", "Antibacterial"] },
+      { "name": "cocoa", "description": "Rich in antioxidants", "benefits": ["Flavonoids", "Mood enhancer"] },
+      { "name": "vanilla", "description": "Natural flavoring", "benefits": ["No artificial additives"] },
+      { "name": "cinnamon", "description": "Antioxidant spice", "benefits": ["Anti-inflammatory", "Blood sugar control"] },
+      { "name": "turmeric", "description": "Anti-inflammatory", "benefits": ["Curcumin", "Antioxidants"] },
+      { "name": "ginger", "description": "Digestive aid", "benefits": ["Anti-nausea", "Anti-inflammatory"] }
+    ],
+    "neutral": [
+      { "name": "salt", "description": "Essential mineral", "notes": "Use in moderation" },
+      { "name": "sugar", "description": "Quick energy source", "notes": "Limit intake" },
+      { "name": "flour", "description": "Carbohydrate base", "notes": "Prefer whole grain versions" },
+      { "name": "yeast", "description": "Leavening agent", "notes": "Natural fermentation" },
+      { "name": "baking powder", "description": "Leavening agent", "notes": "Common baking ingredient" },
+      { "name": "baking soda", "description": "Leavening agent", "notes": "Sodium bicarbonate" },
+      { "name": "cornstarch", "description": "Thickening agent", "notes": "Gluten-free" },
+      { "name": "gelatin", "description": "Gelling agent", "notes": "Animal-derived protein" }
+    ],
+    "bad": [
+      { "name": "high fructose corn syrup", "concerns": ["Highly processed", "Linked to obesity"], "severity": "high" },
+      { "name": "partially hydrogenated oil", "concerns": ["Trans fats", "Heart disease risk"], "severity": "high" },
+      { "name": "monosodium glutamate", "concerns": ["Flavor enhancer", "Sensitivity in some people"], "severity": "medium" },
+      { "name": "artificial colors", "concerns": ["Synthetic dyes", "Hyperactivity links"], "severity": "medium" },
+      { "name": "sodium nitrite", "concerns": ["Preservative", "Potential carcinogen"], "severity": "high" },
+      { "name": "sodium benzoate", "concerns": ["Preservative", "May form benzene"], "severity": "medium" },
+      { "name": "BHA/BHT", "concerns": ["Synthetic antioxidants", "Potential health risks"], "severity": "medium" },
+      { "name": "aspartame", "concerns": ["Artificial sweetener", "Neurological concerns"], "severity": "medium" },
+      { "name": "sucralose", "concerns": ["Artificial sweetener", "Affects gut bacteria"], "severity": "low" },
+      { "name": "carrageenan", "concerns": ["Thickener", "Digestive inflammation"], "severity": "medium" },
+      { "name": "TBHQ", "concerns": ["Preservative", "Potential toxicity"], "severity": "medium" },
+      { "name": "caramel color", "concerns": ["May contain 4-MEI", "Potential carcinogen"], "severity": "medium" }
+    ]
+  },
+  "additives": {
+    "e_numbers": {
+      "E100-E199": "Colors",
+      "E200-E299": "Preservatives",
+      "E300-E399": "Antioxidants",
+      "E400-E499": "Thickeners/Stabilizers",
+      "E500-E599": "Acidity regulators",
+      "E600-E699": "Flavor enhancers",
+      "E900-E999": "Glazing agents/Sweeteners"
+    }
+  }
+}

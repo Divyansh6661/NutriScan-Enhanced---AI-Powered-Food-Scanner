@@ -1,0 +1,68 @@
+
+{
+  "allergens": [
+    {
+      "id": "milk",
+      "name": "Milk & Dairy",
+      "keywords": ["milk", "dairy", "lactose", "whey", "casein", "cream", "butter", "cheese", "yogurt", "ghee"],
+      "severity": "high",
+      "description": "Contains milk or dairy products"
+    },
+    {
+      "id": "eggs",
+      "name": "Eggs",
+      "keywords": ["egg", "albumin", "mayonnaise", "meringue", "lecithin", "lysozyme"],
+      "severity": "high",
+      "description": "Contains eggs or egg products"
+    },
+    {
+      "id": "fish",
+      "name": "Fish",
+      "keywords": ["fish", "anchovy", "bass", "catfish", "cod", "flounder", "grouper", "haddock", "hake", "halibut", "herring", "mahi mahi", "perch", "pike", "pollock", "salmon", "sardine", "sole", "snapper", "swordfish", "tilapia", "trout", "tuna"],
+      "severity": "high",
+      "description": "Contains fish"
+    },
+    {
+      "id": "shellfish",
+      "name": "Crustacean Shellfish",
+      "keywords": ["shellfish", "crab", "lobster", "shrimp", "prawn", "crawfish", "crayfish", "crevette"],
+      "severity": "high",
+      "description": "Contains crustacean shellfish"
+    },
+    {
+      "id": "tree_nuts",
+      "name": "Tree Nuts",
+      "keywords": ["almond", "cashew", "walnut", "pecan", "pistachio", "macadamia", "hazelnut", "brazil nut", "pine nut", "chestnut"],
+      "severity": "high",
+      "description": "Contains tree nuts"
+    },
+    {
+      "id": "peanuts",
+      "name": "Peanuts",
+      "keywords": ["peanut", "groundnut", "peanut butter", "peanut oil", "arachis"],
+      "severity": "high",
+      "description": "Contains peanuts"
+    },
+    {
+      "id": "wheat",
+      "name": "Wheat",
+      "keywords": ["wheat", "wheat flour", "wheat starch", "wheat gluten", "bulgur", "durum", "semolina", "spelt", "farro", "kamut"],
+      "severity": "high",
+      "description": "Contains wheat"
+    },
+    {
+      "id": "soybeans",
+      "name": "Soybeans",
+      "keywords": ["soy", "soybean", "tofu", "edamame", "miso", "tempeh", "soy sauce", "soy protein", "textured vegetable protein"],
+      "severity": "high",
+      "description": "Contains soy"
+    },
+    {
+      "id": "sesame",
+      "name": "Sesame",
+      "keywords": ["sesame", "tahini", "sesame oil", "sesame seed", "sesamol"],
+      "severity": "medium",
+      "description": "Contains sesame"
+    }
+  ]
+}

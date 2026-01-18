@@ -1,0 +1,85 @@
+{
+  "profiles": {
+    "vegan": {
+      "name": "Vegan",
+      "description": "No animal products",
+      "forbidden": [
+        "meat", "beef", "pork", "chicken", "turkey", "lamb", "fish", "seafood",
+        "milk", "dairy", "cheese", "butter", "cream", "yogurt", "whey", "casein",
+        "eggs", "honey", "gelatin", "rennet", "lard", "tallow", "animal fat"
+      ],
+      "warning": ["may contain milk", "may contain eggs", "processed on shared equipment"],
+      "color": "#22c55e"
+    },
+    "vegetarian": {
+      "name": "Vegetarian",
+      "description": "No meat or fish",
+      "forbidden": [
+        "meat", "beef", "pork", "chicken", "turkey", "lamb", "fish", "seafood",
+        "gelatin", "rennet", "lard", "animal fat", "anchovy"
+      ],
+      "warning": ["may contain fish", "animal rennet"],
+      "color": "#84cc16"
+    },
+    "gluten-free": {
+      "name": "Gluten-Free",
+      "description": "No gluten-containing grains",
+      "forbidden": [
+        "wheat", "barley", "rye", "malt", "gluten", "wheat flour", 
+        "wheat starch", "triticale", "spelt", "kamut", "farro"
+      ],
+      "warning": ["may contain gluten", "processed in facility with wheat"],
+      "color": "#f59e0b"
+    },
+    "dairy-free": {
+      "name": "Dairy-Free",
+      "description": "No milk or dairy products",
+      "forbidden": [
+        "milk", "dairy", "cheese", "butter", "cream", "yogurt", 
+        "whey", "casein", "lactose", "ghee"
+      ],
+      "warning": ["may contain milk", "traces of dairy"],
+      "color": "#3b82f6"
+    },
+    "keto": {
+      "name": "Keto",
+      "description": "Low carbohydrate, high fat",
+      "highCarb": [
+        "sugar", "flour", "bread", "rice", "pasta", "potato", 
+        "corn", "wheat", "oats", "quinoa", "beans"
+      ],
+      "warning": ["high in carbohydrates", "contains sugar"],
+      "maxCarbs": 20,
+      "color": "#8b5cf6"
+    },
+    "paleo": {
+      "name": "Paleo",
+      "description": "Whole foods, no processed items",
+      "forbidden": [
+        "grains", "legumes", "dairy", "refined sugar", "processed foods",
+        "wheat", "rice", "beans", "peanuts", "soy"
+      ],
+      "warning": ["processed", "contains grains"],
+      "color": "#ef4444"
+    },
+    "halal": {
+      "name": "Halal",
+      "description": "Islamic dietary laws",
+      "forbidden": [
+        "pork", "lard", "bacon", "ham", "alcohol", "wine", "beer",
+        "gelatin (non-halal)", "animal shortening", "non-halal meat"
+      ],
+      "warning": ["verify halal certification", "may contain alcohol"],
+      "color": "#10b981"
+    },
+    "kosher": {
+      "name": "Kosher",
+      "description": "Jewish dietary laws",
+      "forbidden": [
+        "pork", "shellfish", "mixing meat and dairy", "non-kosher meat"
+      ],
+      "warning": ["verify kosher certification", "pareve status unknown"],
+      "color": "#6366f1"
+    }
+  }
+}
