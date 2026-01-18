@@ -1,6 +1,6 @@
 # 🥗 NutriScan Enhanced - AI-Powered Food Scanner
 
-A comprehensive web application for real-time barcode scanning and AI-powered nutritional analysis with personalized health insights, dietary compatibility checking, and goal tracking.
+A comprehensive web application for real-time barcode scanning and AI-powered nutritional analysis with personalized health insights, dietary compatibility checking, and goal tracking.[View Live Application](https://health-nutriscan.netlify.app/)
 
 ![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
