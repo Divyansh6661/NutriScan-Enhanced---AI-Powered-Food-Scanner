@@ -2,7 +2,7 @@ class GeminiAPI {
     constructor() {
         this.apiKey = '';
         // Changed to gemini-2.0-flash-exp (1,500/day vs 20 total for 2.5)
-        this.baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+        this.baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent';
         this.loadApiKey();
     }
 
